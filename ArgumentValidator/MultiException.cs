@@ -13,22 +13,22 @@ namespace ArgumentValidator
     public sealed class MultiException
         : Exception
     {
-        private Exception[] m_InnerExceptions = new Exception[] { };
+        private readonly IList<Exception> m_InnerExceptions = new List<Exception>();
 
         /// <summary>
         /// Initializes a new instance of the MultiException class.
         /// </summary>
         public MultiException()
-            : base()
         {
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="MultiException"/> class. 
         /// .ctor
         /// </summary>
-        /// <param name="message"></param>
-        public MultiException(string message)
-            : base()
+        /// <param name="message">
+        /// </param>
+        public MultiException(string message): base(message)
         {
         }
 
@@ -40,7 +40,7 @@ namespace ArgumentValidator
         public MultiException(string message, Exception innerException)
             : base(message, innerException)
         {
-            this.m_InnerExceptions = new Exception[1] { innerException };
+            m_InnerExceptions.Add(innerException);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace ArgumentValidator
                 throw new ArgumentNullException("innerExceptions", "Cannot pass collection that contains null references");
             }
 
-            this.m_InnerExceptions = innerExceptions.ToArray();
+            m_InnerExceptions = innerExceptions.ToList();
         }
 
         private MultiException(SerializationInfo info, StreamingContext context)
@@ -99,11 +99,14 @@ namespace ArgumentValidator
         {
             get
             {
-                if (this.m_InnerExceptions != null)
+                if (this.m_InnerExceptions == null)
                 {
-                    for (int i = 0; i < this.m_InnerExceptions.Length; ++i)
+                }
+                else
+                {
+                    foreach (Exception t in this.m_InnerExceptions)
                     {
-                        yield return this.m_InnerExceptions[i];
+                        yield return t;
                     }
                 }
             }
@@ -119,7 +122,7 @@ namespace ArgumentValidator
 
             StringBuilder sbuilder = new StringBuilder(baseString);
 
-            if (m_InnerExceptions.Count() > 0)
+            if (m_InnerExceptions.Any())
             {
                 int exceptionCounter = 0;
 
