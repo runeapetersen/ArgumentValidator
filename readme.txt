@@ -1,0 +1,1 @@
+A fluent validation library inspired by http://blog.getpaint.net/2008/12/06/a-fluent-approach-to-c-parameter-validation/
