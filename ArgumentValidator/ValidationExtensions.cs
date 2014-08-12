@@ -906,10 +906,21 @@ namespace ArgumentValidator
                 return validation;
             else
             {
-                if (validation.Exceptions.Take(2).Count() == 1)
-                    throw new ValidationException("message", validation.Exceptions.First()); // ValidationException is just a standard Exception-derived class with the usual four constructors
-                else
-                    throw new ValidationException("message", new MultiException(validation.Exceptions));
+                // throw all exceptions to enrich them with stacktraces etc.
+                var thrownExceptions = new List<Exception>();
+                foreach (Exception exception in validation.Exceptions)
+                {
+                    try
+                    {
+                        throw exception;
+                    }
+                    catch (Exception ex)
+                    {
+                        thrownExceptions.Add(ex);
+                    }
+                }
+
+                throw new ValidationException(validation.Exceptions);
             }
         }
 

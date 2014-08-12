@@ -15,29 +15,36 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ArgumentValidator
 {
     [Serializable]
-    internal sealed class ValidationException : ArgumentException
+    internal class ValidationException : AggregateException
     {
         public ValidationException()
             : base() { }
 
+        public ValidationException(IEnumerable<Exception> innerExceptions)
+            : base(innerExceptions) { }
+
+        public ValidationException(params Exception[] innerExceptions)
+            : base(innerExceptions) { }
+
         public ValidationException(string message)
             : base(message) { }
+
+        protected ValidationException(SerializationInfo info, StreamingContext context)
+            : base(info, context) { }
 
         public ValidationException(string message, Exception innerException)
             : base(message, innerException) { }
 
-        public ValidationException(SerializationInfo info, StreamingContext context)
-            : base(info, context) { }
+        public ValidationException(string message, IEnumerable<Exception> innerExceptions)
+            : base(message, innerExceptions) { }
 
-        public ValidationException(string message, string paramName)
-            : base(message, paramName) { }
-
-        public ValidationException(string message, string paramName, Exception innerException)
-            : base(message, paramName, innerException) { }
+        public ValidationException(string message, params Exception[] innerExceptions)
+            : base(message, innerExceptions) { }
     }
 }

@@ -6,13 +6,10 @@ using System.Collections.Generic;
 
 namespace AgumentValidatorTests
 {
-    using UtilityLibraryTest;
+    //using UtilityLibraryTest;
 
     public class TfValidationExtensions
     {
-        private readonly static string validationException = "ArgumentValidator.ValidationException";
-        private readonly static string argumentException = "System.ArgumentException";
-
         [Fact]
         public void ValidationDecorator_PassOk()
         {
@@ -39,7 +36,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .ObjectReferenceIsNotNull(s, "myParameter");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -61,7 +58,10 @@ namespace AgumentValidatorTests
                 thrownEx = ex;
             }
 
-            Assert.IsType(typeof(MultiException), thrownEx.InnerException);
+            Assert.True(thrownEx.InnerExceptions.Count == 2);
+            foreach(Exception ex in thrownEx.InnerExceptions)
+                Assert.IsType<ArgumentNullException>(ex);
+            
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .StringIsNotNullOrEmpty(s, "myString");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .StringIsNotNullOrEmpty(s, "myString");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         public enum TestEnum
@@ -112,7 +112,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .EnumIsDefined<TestEnum>(t, "myParameter");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -140,14 +140,14 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .EnumIsDefined<TestEnum2>(t, "myParameter");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
         public void EnumValidation2_NotEnumType_ThrowsException()
         {
             int i = 1;
-            AssertUtil.ThrowsNamedException(argumentException, () =>
+            Assert.Throws<ArgumentException>(() =>
                 {
                     Validation val = Validate.Begin()
                         .EnumIsDefined<Int32>(i, "myParameter");
@@ -161,7 +161,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .DateTimeIsInitialized(dt, "myParameter");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -189,7 +189,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -199,7 +199,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -209,7 +209,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -219,7 +219,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -238,7 +238,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -266,7 +266,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -285,7 +285,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -304,7 +304,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -341,7 +341,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositiveOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -360,7 +360,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositiveOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -388,7 +388,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -398,7 +398,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -408,7 +408,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -418,7 +418,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -437,7 +437,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -465,7 +465,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -484,7 +484,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -503,7 +503,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -531,7 +531,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositiveOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -559,7 +559,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -569,7 +569,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -579,7 +579,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -589,7 +589,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -608,7 +608,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -636,7 +636,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -655,7 +655,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -674,7 +674,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -702,7 +702,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositiveOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -730,7 +730,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -740,7 +740,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -750,7 +750,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -760,7 +760,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -779,7 +779,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -807,7 +807,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -826,7 +826,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -845,7 +845,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -873,7 +873,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositiveOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -901,7 +901,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -911,7 +911,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -921,7 +921,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -931,7 +931,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -950,7 +950,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -978,7 +978,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -997,7 +997,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1016,7 +1016,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1044,7 +1044,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositiveOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1072,7 +1072,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1082,7 +1082,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1092,7 +1092,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1102,7 +1102,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1121,7 +1121,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1149,7 +1149,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1168,7 +1168,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1187,7 +1187,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1233,7 +1233,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsPositive(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1243,7 +1243,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1253,7 +1253,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegative(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1263,7 +1263,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNegativeOrZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1282,7 +1282,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1310,7 +1310,7 @@ namespace AgumentValidatorTests
             Validation val = Validate.Begin()
                 .NumericValueIsNotZero(i, "myParam");
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1322,7 +1322,7 @@ namespace AgumentValidatorTests
                 .CollectionIsNotNullOrEmpty(testCollection, "myParam");
 
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1334,7 +1334,7 @@ namespace AgumentValidatorTests
                 .CollectionIsNotNullOrEmpty(testCollection, "myParam");
 
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1357,7 +1357,7 @@ namespace AgumentValidatorTests
                 .CollectionIsNotNullOrEmpty(testCollection, "myParam");
 
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
@@ -1369,7 +1369,7 @@ namespace AgumentValidatorTests
                 .CollectionIsNotNullOrEmpty(testCollection, "myParam");
 
             Assert.NotNull(val);
-            AssertUtil.ThrowsNamedException(validationException, () => val.Check());
+            Assert.Throws<ValidationException>(() => val.Check());
         }
 
         [Fact]
